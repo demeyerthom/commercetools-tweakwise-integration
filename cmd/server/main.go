@@ -29,7 +29,7 @@ func main() {
 
 	parser := flags.NewParser(server, flags.Default)
 	parser.ShortDescription = "Commercetools Tweakwise integration manager"
-	parser.LongDescription = "The admin calls required for managing the Commercetools to Tweakwise integration"
+	parser.LongDescription = "A service built for managing the Commercetools to Tweakwise integration"
 	server.ConfigureFlags()
 	for _, optsGroup := range api.CommandLineOptionsGroups {
 		_, err := parser.AddGroup(optsGroup.ShortDescription, optsGroup.LongDescription, optsGroup.Options)
