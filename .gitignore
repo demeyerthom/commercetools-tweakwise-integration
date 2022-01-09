@@ -1,0 +1,6 @@
+/.idea
+
+### Terraform ###
+**/*.tfvars
+**/.terraform
+**/.terraform.lock.hcl

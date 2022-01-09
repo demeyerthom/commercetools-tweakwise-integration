@@ -1,0 +1,133 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "A service built for managing the Commercetools to Tweakwise integration",
+    "version": "1.0.6",
+    "title": "Commercetools Tweakwise integration manager"
+  },
+  "host": "localhost:8080",
+  "schemes": [
+    "https"
+  ],
+  "tags": [
+    {
+      "name": "message",
+      "description": "Messages about commercetools updates to be received"
+    },
+    {
+      "name": "gcp",
+      "description": "Functions specific to a GCP environment"
+    },
+    {
+      "name": "admin",
+      "description": "Functions to administer application"
+    }
+  ],
+  "paths": {
+    "/message/gcp/product": {
+      "post": {
+        "tags": [
+          "message",
+          "gcp"
+        ],
+        "summary": "Receives a GCP message for a product update",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "The product message",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GcpMessage"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {}
+          }
+        }
+      }
+    },
+    "/message/gcp/category": {
+      "post": {
+        "tags": [
+          "message",
+          "gcp"
+        ],
+        "summary": "Receives a GCP message for a category update",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "The category message",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GcpMessage"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "OK",
+            "schema": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "GcpMessage": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "object",
+          "properties": {
+            "attributes": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "data": {
+              "description": "The base64-encoded message data",
+              "type": "string"
+            },
+            "message_id": {
+              "type": "string"
+            },
+            "publish_time": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "data",
+            "message_id",
+            "publish_time"
+          ]
+        },
+        "subscription": {
+          "description": "The resource endpoint",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message",
+        "subscription"
+      ]
+    }
+  }
+}
