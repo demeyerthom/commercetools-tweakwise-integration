@@ -1,0 +1,187 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Commercetools Tweakwise Integration",
+    "description": "A service built for managing the Commercetools to Tweakwise integration",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "configuration",
+      "description": "Calls loading and changing application configuration"
+    },
+    {
+      "name": "manage",
+      "description": "Endpoints to start and stop the synchronization"
+    }
+  ],
+  "paths": {
+    "/start": {
+      "post": {
+        "tags": [
+          "manage"
+        ],
+        "summary": "Start the application",
+        "responses": {
+          "202": {
+            "description": "ACCEPTED"
+          }
+        }
+      }
+    },
+    "/stop": {
+      "post": {
+        "tags": [
+          "manage"
+        ],
+        "summary": "Stop the application",
+        "responses": {
+          "202": {
+            "description": "ACCEPTED"
+          }
+        }
+      }
+    },
+    "/connect": {
+      "post": {
+        "tags": [
+          "manage"
+        ],
+        "summary": "Connect the application",
+        "responses": {
+          "202": {
+            "description": "ACCEPTED"
+          }
+        }
+      }
+    },
+    "/configuration": {
+      "get": {
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Fetch the current configuration",
+        "responses": {
+          "200": {
+            "description": "The current configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Configuration"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "configuration"
+        ],
+        "summary": "Create a new configuration option",
+        "requestBody": {
+          "description": "The new configuration object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Configuration"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Configuration": {
+        "required": [
+          "source",
+          "tweakwise"
+        ],
+        "type": "object",
+        "properties": {
+          "tweakwise": {
+            "required": [
+              "instance",
+              "token"
+            ],
+            "type": "object",
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "The tweakwise token"
+              },
+              "instance": {
+                "type": "string",
+                "description": "The tweakwise instance key"
+              }
+            }
+          },
+          "source": {
+            "description": "The source for the subscriptions. Only one is allowed.",
+            "discriminator": {
+              "propertyName": "type"
+            },
+            "oneOf": [
+              {
+                "$ref": "#/components/schemas/GcpSource"
+              }
+            ]
+          }
+        }
+      },
+      "Source": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "gcp"
+            ]
+          }
+        }
+      },
+      "GcpSource": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Source"
+          },
+          {
+            "required": [
+              "product_topic",
+              "project_id"
+            ],
+            "type": "object",
+            "properties": {
+              "project_id": {
+                "type": "string",
+                "description": "The ID of the project that contains the Pub/Sub topic"
+              },
+              "product_topic": {
+                "type": "string",
+                "description": "Name of the product topic",
+                "default": "commercetools-to-tweakwise-integration-products"
+              }
+            },
+            "description": "Use GCP to listen for events. See https://docs.commercetools.com/api/projects/subscriptions#google-cloud-pubsub-destination for more information"
+          }
+        ]
+      }
+    }
+  }
+}

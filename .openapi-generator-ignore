@@ -1,0 +1,6 @@
+internal/README.md
+internal/.openapi-generator-ignore
+internal/api/*
+internal/.openapi-generator
+internal/server/api_configuration_service.go
+internal/server/api_manage_service.go
